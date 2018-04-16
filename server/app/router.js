@@ -7,7 +7,7 @@ module.exports = app => {
 
   const can = app.middleware.role;
   // const isMicroService = app.middleware.microServiceProxy;
-  const isMicroService = async (next)=>{
+  const isMicroService = async (ctx, next)=>{
     await next();
   };
   // ------------------------------------------------------------------------------------------------【api路由】
