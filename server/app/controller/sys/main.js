@@ -2,6 +2,16 @@
 
 module.exports = app => {
   class sysController extends app.Controller {
+    async notRouter(ctx){
+      ctx.body = {
+        code: '404',
+        msg: ctx.helper.errorCode['404'],
+        result: {
+          
+        },
+      };
+      ctx.status = 404;
+    }
 
     async userInfo(ctx) {
       if (!ctx.isAuthenticated()) {

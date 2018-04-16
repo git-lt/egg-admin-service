@@ -6,6 +6,10 @@
 module.exports = app => {
 
   const can = app.middleware.role;
+  // const isMicroService = app.middleware.microServiceProxy;
+  const isMicroService = async (next)=>{
+    await next();
+  };
   // ------------------------------------------------------------------------------------------------【api路由】
 
   /* 用户管理 */
@@ -36,15 +40,18 @@ module.exports = app => {
   app.get('/nodeApi/auth/modules/system', can('auth.module.system'), 'auth.module.system'); // 系统级模块列表
 
   /* 系统级接口 */
-  app.get('sysUserInfo', '/nodeApi/sys/userInfo', 'sys.main.userInfo'); // 获取用户信息
-  app.get('sysSidebar', '/nodeApi/sys/sidebar', 'sys.main.sidebar'); // 查看系统菜单
+  app.get('/nodeApi/sys/userInfo', 'sys.main.userInfo'); // 获取用户信息
+  app.get('/nodeApi/sys/sidebar', 'sys.main.sidebar'); // 查看系统菜单
 
   app.get('/nodeApi/sys/editProfile/:id/edit', 'sys.editProfile.edit'); // 编辑资料-用户详情
   app.put('/nodeApi/sys/editProfile/:id', 'sys.editProfile.update'); // 编辑资料-修改用户详情
   app.put('/nodeApi/sys/editProfile/pwd/:id', 'sys.editProfile.setPassword'); // 编辑资料-重置密码
 
-
-  /* passport */
+  /* Passport */
   app.get('/nodeApi/sys/login', 'sys.passport.login'); // 登录
-  app.get('sysLogout', '/nodeApi/sys/logout', 'sys.passport.logout'); // 退出登录
+  app.get('/nodeApi/sys/logout', 'sys.passport.logout'); // 退出登录
+
+  /* Proxy or 404 */
+  app.get(/^\//, isMicroService, 'sys.main.notRouter');
+  app.post(/^\//, isMicroService, 'sys.main.notRouter');
 };
