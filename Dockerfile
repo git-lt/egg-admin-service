@@ -1,6 +1,5 @@
-FROM daocloud.io/library/centos:latest
+FROM daocloud.io/node:8.4.0-onbuild
 
-ADD ./docker/node-v8.tar.gz /usr
 RUN mkdir /var/eas
 
 COPY ./client/dist/ /var/eas/app/assets
